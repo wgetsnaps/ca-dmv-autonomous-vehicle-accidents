@@ -21,16 +21,17 @@ Or, if you'd rather see the PDFs as a file listing:
 
 (Read on if you care about the technical/scripting details of how to sloppily archive a website that runs on brittle Javascript)
 
+While Google [previously self-published monthly compilations](http://web.archive.org/web/20161022094922/https://www.google.com/selfdrivingcar/reports/) of their accidents, all self-driving car operators are required to file an Occupational Licensing Form 316 -- a.k.a. "*Report of Traffic Accident Involving an Autonomous Vehicle*" [within 10 business days of an accident](https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/testing/).
 
-This page is where California's DMV posts accident reports involving autonomous vehicles, such as the ones operated by Google/Waymo. While [Google *used* to disclose these incidents voluntarily on its own site](http://2016.padjo.org/assignments/google-car-crash-reports/), the official forms/reports are published on dmv.ca.gov. 
+Here's a [clean copy of an OL 316 form](readme_images/clean-OL-316-form.pdf).
 
 
-As [Business Insider reports](http://www.businessinsider.com/waymo-ends-publishing-self-driving-car-accident-reports-website-2017-1):
+
+More information from this [January 2017 Business Insider story](http://www.businessinsider.com/waymo-ends-publishing-self-driving-car-accident-reports-website-2017-1):
 
 > [Google/Waymo] removed the page of monthly reports detailing traffic collisions and other accidents on public roads that involve its self-driving vehicles. And Waymo will no longer publish the accident reports on its website, Business Insider has learned. 
 
 > The page that once hosted all of the accident reports now redirects to Waymo's general website, which makes no mention of any accidents.
-
 
 > ...Jessica Gonzalez, a spokesperson for the California DMV, told Business Insider that Waymo is not required to publish the monthly public reports. But the company is required to report any accident involving a Waymo self-driving vehicle to the DMV. Those accidents are published on the California DMV's website. 
 
@@ -183,7 +184,8 @@ tl;dr: Using `curl`, `ack`, and `xargs` to do a quickie archive of Google's self
 
 As mentioned in the intro, Google used to publish their own monthly compilations of the accident reports. This was in addition to what they submitted to California's DMV, but these reports were more reader-friendly and contained more information about Google's overall program, including accidents that happened outside of California.
 
-Google's landing page for these reports *was* at: https://www.google.com/selfdrivingcar/reports/
+Google's landing page for these reports *was* at: <br>
+https://www.google.com/selfdrivingcar/reports/
 
 However, as Business Insider reported, the landing page was changed to a redirect to Waymo [in January 2017](http://web.archive.org/web/20170225184124/https://www.google.com/selfdrivingcar/reports/).
 
@@ -191,12 +193,10 @@ The most recent snapshot of Google's reports page, pre-Waymo-redirect, is from [
 
 The snapshot links to the Google PDFs, but the Archive may not have actually saved a copy of those PDFs, because their URLS do a redirect, e.g. 
 
-From: 
-
+From: <br>
 https://www.google.com/selfdrivingcar/files/reports/report-0916.pdf
 
-To:
-
+To: <br>
 https://static.googleusercontent.com/media/www.google.com/en//selfdrivingcar/files/reports/report-0916.pdf
 
 At some point, this Google static file server might be taken down, so let's archive the reports using the URLs as found on the Archive snapshot and using `curl` to follow the redirects:
@@ -272,7 +272,7 @@ Government websites should use Javascript *sparingly*. There's no reason why a p
 
 Otherwise, feel free to use these reports for your research. I use them as an [exercise on the process -- and its complications and nuances -- of turning event info into structured data](http://2016.padjo.org/assignments/google-car-crash-reports/). 
 
-
+The DMV's homepage for [Autonomous Vehicles in California](https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/) contains more kinds of information and data, including the [disengagement reports](https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/testing) (which are, wheee, you guessed it, in [PDF form](https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/disengagement_report_2016)).
 
 
 
