@@ -1,9 +1,9 @@
 #  Mirror of CA.gov DMV's "Report of Traffic Accident Involving an Autonomous Vehicle (OL 316)"
 
+### or, "How to semi-autonomously scrape the California DMV's autonomous vehicle accident reports"
+
 ### or, "*How to curl when wget gets blocked by JavaScript*"
 
-
-This page is where California's DMV posts accident reports involving autonomous vehicles, [such as the ones operated by Google/Waymo](http://www.businessinsider.com/waymo-ends-publishing-self-driving-car-accident-reports-website-2017-1)
 
 Mirror page:
 
@@ -13,9 +13,18 @@ Original page:
 
 https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316
 
-The CA DMV page is mostly a bunch of links to PDFS (which you can view in the [pdfs/](pdfs/) directory on this repo):
 
-![image sample-site-screenshot.png](sample-site-screenshot.png)
+This page is where California's DMV posts accident reports involving autonomous vehicles, such as the ones operated by Google/Waymo. These reports used to be self-published, but now we have to go to dma.ca.gov to find them. As [Business Insider reports](http://www.businessinsider.com/waymo-ends-publishing-self-driving-car-accident-reports-website-2017-1):
+
+> [Google/Waymo] removed the page of monthly reports detailing traffic collisions and other accidents on public roads that involve its self-driving vehicles. And Waymo will no longer publish the accident reports on its website, Business Insider has learned. 
+
+> The page that once hosted all of the accident reports now redirects to Waymo's general website, which makes no mention of any accidents.
+
+
+> ...Jessica Gonzalez, a spokesperson for the California DMV, told Business Insider that Waymo is not required to publish the monthly public reports. But the company is required to report any accident involving a Waymo self-driving vehicle to the DMV. Those accidents are published on the California DMV's website. 
+
+
+
 
 
 
@@ -29,7 +38,13 @@ So here's a manual workaround using `curl`, `sed`, `ack`, and a simple Bash loop
 
 ### Saving a proper copy of the HTML
 
-Visiting the [CA DMV's Autonomous Reports accidents page](https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) in a non-JS enabled browser will get you something similar to what the [Internet Archive crawler gets](http://web.archive.org/web/20170425060918/https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) when encountering CA.gov's un-robust Javascript:
+
+The CA DMV page is mostly a bunch of links to PDFS (which you can view in the [pdfs/](pdfs/) directory on this repo):
+
+![image sample-site-screenshot.png](sample-site-screenshot.png)
+
+
+However, visiting the [CA DMV's Autonomous Reports accidents page](https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) in a non-JS enabled browser will get you something similar to what the [Internet Archive crawler gets](http://web.archive.org/web/20170425060918/https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) when encountering CA.gov's un-robust Javascript:
 
 ![image archive-example.png](archive-example.png)
 
