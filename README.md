@@ -1,6 +1,6 @@
-# ca-dmv-autonomous-vehicle-accidents
-Mirror of CA.gov's "Report of Traffic Accident Involving an Autonomous Vehicle (OL 316)"
+#  Mirror of CA.gov DMV's "Report of Traffic Accident Involving an Autonomous Vehicle (OL 316)"
 
+This page is where California's DMV posts accident reports involving autonomous vehicles, [such as the ones operated by Google/Waymo](http://www.businessinsider.com/waymo-ends-publishing-self-driving-car-accident-reports-website-2017-1)
 
 Mirror page:
 
@@ -10,10 +10,19 @@ Original page:
 
 https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316
 
+The CA DMV page is mostly a bunch of links to PDFS:
 
-## Scraping code
+![image sample-site-screenshot.png](sample-site-screenshot.png)
 
-Note: wget doesn't work because the CA DMV site won't work unless visited by a browser with JavaScript enabled, which is used to sloppily set a shit cookie. I say "sloppily" because it renders an error message even for the [Internet Archive's robust crawler](http://web.archive.org/web/20170425060918/https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316), which likely means it's not particularly robust for web browsers with certain accessibility requirements.
+
+
+
+## Scraping issues
+
+**tl;dr**: The DMV page is a hot mess that can't be navigated by a Javascript-lacking client such as `wget`. So I've written a workaround that has one point-and-click step, and then a bunch of fancy `bash`-ing with regexes to at least mirror the content of the page (i.e. the PDF reports)
+
+
+wget doesn't work because the CA DMV site won't work unless visited by a browser with JavaScript enabled, which is used to sloppily set a shit cookie. I say "sloppily" because it renders an error message even for the [Internet Archive's robust crawler](http://web.archive.org/web/20170425060918/https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316), which likely means it's not particularly robust for web browsers with certain accessibility requirements.
 
 So here's a manual workaround:
 
