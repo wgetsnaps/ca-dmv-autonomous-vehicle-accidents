@@ -13,9 +13,15 @@ Original page:
 
 https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316
 
+Or, if you'd rather see the PDFs as a file listing:
+
+- [pdfs/](pdfs/) - Autonomous accident reports submitted to the DMV (as of June 21, 2017)
+- [google-pdfs/](google-pdfs/) - archived copies of Google's self-published monthly reports.
 
 ![image sample-site-screenshot.png](readme_images/sample-site-screenshot.png)
 
+
+(Read on if you care about the technical/scripting details of how to sloppily archive a website that runs on brittle Javascript)
 
 
 This page is where California's DMV posts accident reports involving autonomous vehicles, such as the ones operated by Google/Waymo. While [Google *used* to disclose these incidents voluntarily on its own site](http://2016.padjo.org/assignments/google-car-crash-reports/), the official forms/reports are published on dmv.ca.gov. 
