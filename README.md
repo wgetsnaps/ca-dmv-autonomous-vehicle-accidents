@@ -1,8 +1,8 @@
 #  Mirror of CA.gov DMV's "Report of Traffic Accident Involving an Autonomous Vehicle (OL 316)"
 
-### or, "How to semi-autonomously scrape the California DMV's autonomous vehicle accident reports"
+### or, *How to semi-autonomously scrape the California DMV's autonomous vehicle accident reports*
 
-### or, "*How to curl when wget gets blocked by JavaScript*"
+### or, *How to curl when wget gets blocked by JavaScript*
 
 
 Mirror page (sans proper CSS/JS references that `wget` would have fetched):
