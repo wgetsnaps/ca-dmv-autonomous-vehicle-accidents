@@ -84,7 +84,13 @@ So we require a *manual* step: visiting the CA.gov page using the Chrome web bro
       -H 'Cache-Control: no-cache' \
       -H 'Cookie: pieceofshitcookie' -H 'Connection: keep-alive' --compressed
     ```
-4. Paste that `curl` into your Terminal and save the results as a file named [`original-index.html`](original-index.html)
+4. Paste that `curl` into your Terminal and save the results as a file named [`original-index.html`](original-index.html), e.g.
+  
+    ```sh
+    $ curl 'blahblahblah...' \
+      -H 'Cookie: pieceofshitcookie' -H 'Connection: keep-alive' --compressed \
+      -o original-index.html
+    ```
 
 
 ### Extracting the PDFs
@@ -93,7 +99,7 @@ So we require a *manual* step: visiting the CA.gov page using the Chrome web bro
 
 ```html
 <p dir="ltr">
-  <a href="/portal/wcm/connect/7775ab52-ff6a-4473-8300-e3d589cd6448/GMCruise_052517.pdf?MOD=AJPERES" >
+  <a href="/portal/wcm/connect/7775ab52-ff6a-4473-8300-e3d589cd6448/GMCruise_052517.pdf?MOD=AJPERES">
     GM Cruise May 25, 2017
   </a>
 </p>
@@ -102,11 +108,15 @@ So we require a *manual* step: visiting the CA.gov page using the Chrome web bro
 So we need to extract those relative URLs, translate them to absolute URLs, and download them to our computer. This can be done with a combination of regexes and a Bash `while` loop, with `curl`:
 
 
-1. Make a directory called `pdfs`, e.g. `$ mkdir pdfs`
+1. Make a directory called `pdfs`
+
+  ```sh
+  $ mkdir pdfs
+  ```
 2. Use a grep-like program to match and extract the URLs from the `[original-index.html](original-index.html)` file. I like using [ack](https://beyondgrep.com/) because it not only provides PCRE-flavor regexes, but the use of capture groups to format output just as we need it (you could consider it a lazy person's `awk`):
 
     ```sh
-    ack 'href="(.+?\.pdf)' original-index.html \
+    $ ack 'href="(.+?\.pdf)' original-index.html \
       --output '$1'
     ```
 
