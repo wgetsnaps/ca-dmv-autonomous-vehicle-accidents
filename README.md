@@ -48,8 +48,9 @@ However, visiting the [CA DMV's Autonomous Reports accidents page](https://www.d
 
 ![image archive-example.png](archive-example.png)
 
+The dma.ca.gov's Javascript, as far as I can tell, is used to set a cookie -- and check for headers, such as a `User-Agent` that is *not* `wget` -- that is validated server-side. Currently, `wget` doesn't execute Javascript, so that makes it fairly impossible to use `wget` alone to capture the dma.ca.gov page.
 
-So this step requires visiting the CA.gov page using Chrome, normally, to get a `cURL` command that can be used to save the raw, rendered HTML.
+So we require a *manual* step: visiting the CA.gov page using the Chrome web browser to get a `cURL` command that can be used to save the raw, rendered HTML.
 
 
 1. Visit the page using Chrome and have the **Network Panel** activated
