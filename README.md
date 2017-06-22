@@ -19,12 +19,12 @@ Or, if you'd rather see the PDFs as a file listing:
 ![image sample-site-screenshot.png](readme_images/sample-site-screenshot.png)
 
 
-(Read on if you care about the technical/scripting details of how to sloppily archive a website that runs on brittle Javascript)
+
+## Background of how California regulates self-driving cars
 
 While Google [previously self-published monthly compilations](http://web.archive.org/web/20161022094922/https://www.google.com/selfdrivingcar/reports/) of their accidents, all self-driving car operators are required to file an Occupational Licensing Form 316 -- a.k.a. "*Report of Traffic Accident Involving an Autonomous Vehicle*" [within 10 business days of an accident](https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/testing/).
 
 Here's a [clean copy of an OL 316 form](readme_images/clean-OL-316-form.pdf).
-
 
 
 More information from this [January 2017 Business Insider story](http://www.businessinsider.com/waymo-ends-publishing-self-driving-car-accident-reports-website-2017-1):
@@ -43,12 +43,17 @@ http://web.archive.org/web/20161022094922/https://www.google.com/selfdrivingcar/
 
 
 
-## Web-scraping the manual way
+## Web-scraping the semi-automatic way
 
 **tl;dr**: California's DMV page is a **hot shit mess** that can't be used with a client that lacks Javascript, i.e. `wget` So I've written a workaround that has one point-and-click step, and then a bunch of fancy `bash`-ing with regexes to at least mirror the content of the page (i.e. the PDF reports)
 
+So the rest of this guide describes an alternative approach that combined a manual workaround -- via Google Chrome's dev tools -- combined with `curl`, `sed`, `ack`, and other Bash tools. 
 
-So here's a manual workaround using `curl`, `sed`, `ack`, and a simple Bash loop. And Google Chrome's dev tools. 
+What's the point of this pain? From a journalistic standpoint, the dmv.ca.gov appears to be so brittle that even the otherwise-robust [Internet Archive crawler](http://web.archive.org/web/20170425060918/https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) can't render it. If we just wanted to copy the PDFs, perhaps a browser plugin like [DownloadThemAll](http://www.downthemall.net/) would work. But the purpose of the [wgetsnaps](https://github.com/wgetsnaps) project is to provide an automatable workflow so that a site or webpage can be archived *consistently*, without depending on series of plugins and pointing-and-clicking that can easily get fumbled, nevermind it being tedious physical labor. 
+
+While the archiving of this particular dmv.ca.gov page can't be completely automated (without much more programming work), this guide is meant to show how such a task can be *mostly* automated.
+
+So read on if you care about the technical/scripting details of how to sloppily archive a government website that uses brittle Javascript.
 
 
 ### Manually downloading and saving a copy of the dmv.ca.gov webpage
@@ -59,7 +64,7 @@ The CA DMV page is mostly a bunch of links to PDFS (which you can view in the [p
 ![image sample-site-screenshot.png](readme_images/sample-site-screenshot.png)
 
 
-However, visiting the [CA DMV's Autonomous Reports accidents page](https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) in a non-JS enabled browser will get you something similar to what the [Internet Archive crawler gets](http://web.archive.org/web/20170425060918/https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) when encountering CA.gov's un-robust Javascript:
+However, visiting the [CA DMV's Autonomous Reports accidents page](https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) in a non-JS enabled browser will get you something similar to what the [Internet Archive crawler gets](http://web.archive.org/web/20170425060918/https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) when encountering CA.gov's brittle Javascript:
 
 ![image archive-example.png](readme_images/archive-example.png)
 
