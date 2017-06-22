@@ -14,7 +14,7 @@ Original page:
 https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316
 
 
-This page is where California's DMV posts accident reports involving autonomous vehicles, such as the ones operated by Google/Waymo. These reports used to be self-published, but now we have to go to dma.ca.gov to find them. As [Business Insider reports](http://www.businessinsider.com/waymo-ends-publishing-self-driving-car-accident-reports-website-2017-1):
+This page is where California's DMV posts accident reports involving autonomous vehicles, such as the ones operated by Google/Waymo. These reports used to be self-published, but now we have to go to dmv.ca.gov to find them. As [Business Insider reports](http://www.businessinsider.com/waymo-ends-publishing-self-driving-car-accident-reports-website-2017-1):
 
 > [Google/Waymo] removed the page of monthly reports detailing traffic collisions and other accidents on public roads that involve its self-driving vehicles. And Waymo will no longer publish the accident reports on its website, Business Insider has learned. 
 
@@ -48,7 +48,7 @@ However, visiting the [CA DMV's Autonomous Reports accidents page](https://www.d
 
 ![image archive-example.png](archive-example.png)
 
-The dma.ca.gov's Javascript, as far as I can tell, is used to set a cookie -- and check for headers, such as a `User-Agent` that is *not* `wget` -- that is validated server-side. Currently, `wget` doesn't execute Javascript, so that makes it fairly impossible to use `wget` alone to capture the dma.ca.gov page.
+The dmv.ca.gov's Javascript, as far as I can tell, is used to set a cookie -- and check for headers, such as a `User-Agent` that is *not* `wget` -- that is validated server-side. Currently, `wget` doesn't execute Javascript, so that makes it fairly impossible to use `wget` alone to capture the dmv.ca.gov page.
 
 So we require a *manual* step: visiting the CA.gov page using the Chrome web browser to get a `cURL` command that can be used to save the raw, rendered HTML.
 
@@ -154,7 +154,7 @@ Short explanation of this `sed` command: it runs 3 substitution expressions:
 
 1. Remove all instances of `?MOD=AJPERES`
 2. Replace the `/portal/wcm/connect/...` paths with `./pdfs/`
-3. Neuter the `<base>` tag which caused the browser to prepend the original `dma.ca.gov` domain to relative URLs.
+3. Neuter the `<base>` tag which caused the browser to prepend the original `dmv.ca.gov` domain to relative URLs.
 
 
 
