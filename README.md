@@ -47,12 +47,12 @@ So here's a manual workaround using `curl`, `sed`, `ack`, and a simple Bash loop
 
 The CA DMV page is mostly a bunch of links to PDFS (which you can view in the [pdfs/](pdfs/) directory on this repo):
 
-![image sample-site-screenshot.png](sample-site-screenshot.png)
+![image sample-site-screenshot.png](readme_images/sample-site-screenshot.png)
 
 
 However, visiting the [CA DMV's Autonomous Reports accidents page](https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) in a non-JS enabled browser will get you something similar to what the [Internet Archive crawler gets](http://web.archive.org/web/20170425060918/https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) when encountering CA.gov's un-robust Javascript:
 
-![image archive-example.png](archive-example.png)
+![image archive-example.png](readme_images/archive-example.png)
 
 The dmv.ca.gov's Javascript, as far as I can tell, is used to set a cookie -- and check for headers, such as a `User-Agent` that is *not* `wget` -- that is validated server-side. Currently, `wget` doesn't execute Javascript, so that makes it fairly impossible to use `wget` alone to capture the dmv.ca.gov page.
 
@@ -62,7 +62,7 @@ So we require a *manual* step: visiting the CA.gov page using the Chrome web bro
 1. Visit the page using Chrome and have the **Network Panel** activated
 2. Copy the request for the `autonomousveh_ol316` page using the **Copy as cURL** feature:
   
-   ![image copy-as-curl.png](copy-as-curl.png)
+   ![image copy-as-curl.png](readme_images/copy-as-curl.png)
 
 3. This should result in a shell command that looks something like this:
 
@@ -170,17 +170,16 @@ tl;dr: Using `curl`, `ack`, and `xargs` to do a quickie archive of Google's self
 
 *note: This really should be its own [wgetsnaps](https://github.com/wgetsnaps) repo, but whatever.*
 
-As mentioned in the intro, Google used to publish their own monthly compilations of the accident reports. This was in addition to what they submitted to California's DMV, but these reports were more reader-friendly and contained more information about the program overall, while omitting some of the official report data (such as timestamp of accident).
+<img src="areadme_images/rchived-google-reports-page.png" alt="archived-google-reports-page.png">
 
-Google's landing page for these reports *was*:
 
-https://www.google.com/selfdrivingcar/reports/
+As mentioned in the intro, Google used to publish their own monthly compilations of the accident reports. This was in addition to what they submitted to California's DMV, but these reports were more reader-friendly and contained more information about Google's overall program, including accidents that happened outside of California.
+
+Google's landing page for these reports *was* at: https://www.google.com/selfdrivingcar/reports/
 
 However, as Business Insider reported, the landing page was changed to a redirect to Waymo [in January 2017](http://web.archive.org/web/20170225184124/https://www.google.com/selfdrivingcar/reports/).
 
-The most recent snapshot of Google's reports page, pre-Waymo-redirect, is from The Internet Archive on October 22, 2016:
-
-http://web.archive.org/web/20161022094922/https://www.google.com/selfdrivingcar/reports/
+The most recent snapshot of Google's reports page, pre-Waymo-redirect, is from [The Internet Archive on October 22, 2016](http://web.archive.org/web/20161022094922/https://www.google.com/selfdrivingcar/reports/)
 
 The snapshot links to the Google PDFs, but the Archive may not have actually saved a copy of those PDFs, because their URLS do a redirect, e.g. 
 
@@ -250,13 +249,13 @@ Compare Google's self-published August 2016 report versus the 2 accident reports
 
 Here's a screenshot of the August 8, 2016 accident as described in Google's [self-published monthly report](google-pdfs/report-0816.pdf):
 
-![image google-2016-08-report-screenshot.png](google-2016-08-report-screenshot.png)
+![image google-2016-08-report-screenshot.png](readme_images/google-2016-08-report-screenshot.png)
 
-Here's screenshot sof [the August 8, 2016 report](pdfs/Google_080816.pdf), as sent to the DMV:
+Here's screenshots of [the August 8, 2016 report](pdfs/Google_080816.pdf), as sent to the DMV. Note how the narrative is worded slightly differently, and how the form has fields for specific details, such as **Time of Accident**, that aren't seen as relevant in Google's monthly summaries:
 
-![image google-2016-08-08-dmv-report-01-screenshot.jpg](google-2016-08-08-dmv-report-01-screenshot.jpg)
+![image google-2016-08-08-dmv-report-01-screenshot.jpg](readme_images/google-2016-08-08-dmv-report-01-screenshot.jpg)
 
-![image google-2016-08-08-dmv-report-02-screenshot.jpg](google-2016-08-08-dmv-report-02-screenshot.jpg)
+![image google-2016-08-08-dmv-report-02-screenshot.jpg](readme_images/google-2016-08-08-dmv-report-02-screenshot.jpg)
 
 
 ## Conclusion
