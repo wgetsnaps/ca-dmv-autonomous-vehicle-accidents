@@ -170,7 +170,7 @@ tl;dr: Using `curl`, `ack`, and `xargs` to do a quickie archive of Google's self
 
 *note: This really should be its own [wgetsnaps](https://github.com/wgetsnaps) repo, but whatever.*
 
-<img src="areadme_images/rchived-google-reports-page.png" alt="archived-google-reports-page.png">
+<img src="readme_images/archived-google-reports-page.png" alt="archived-google-reports-page.png">
 
 
 As mentioned in the intro, Google used to publish their own monthly compilations of the accident reports. This was in addition to what they submitted to California's DMV, but these reports were more reader-friendly and contained more information about Google's overall program, including accidents that happened outside of California.
