@@ -16,18 +16,33 @@ The CA DMV page is mostly a bunch of links to PDFS:
 
 
 
+## Scraping the hard way (or, "*How to curl when wget just don't work*")
 
-## Scraping issues
+**tl;dr**: California's DMV page is a **hot shit mess** that can't be used with a client that lacks Javascript, i.e. `wget` So I've written a workaround that has one point-and-click step, and then a bunch of fancy `bash`-ing with regexes to at least mirror the content of the page (i.e. the PDF reports)
 
-**tl;dr**: The DMV page is a hot mess that can't be navigated by a Javascript-lacking client such as `wget`. So I've written a workaround that has one point-and-click step, and then a bunch of fancy `bash`-ing with regexes to at least mirror the content of the page (i.e. the PDF reports)
+----------
+
+wget doesn't work because the CA DMV site won't work unless visited by a browser with JavaScript enabled, which is used to sloppily set a shit cookie. I say "sloppily" because it renders an error message even for the [Internet Archive's robust crawler]().
+
+So here's a manual workaround using `curl`, `sed`, `ack`, and a simple Bash loop. And Google Chrome's dev tools. 
 
 
-wget doesn't work because the CA DMV site won't work unless visited by a browser with JavaScript enabled, which is used to sloppily set a shit cookie. I say "sloppily" because it renders an error message even for the [Internet Archive's robust crawler](http://web.archive.org/web/20170425060918/https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316), which likely means it's not particularly robust for web browsers with certain accessibility requirements.
+### Saving a proper copy of the HTML
 
-So here's a manual workaround:
+Visiting the [CA DMV's Autonomous Reports accidents page](https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) in a non-JS enabled browser will get you something similar to what the [Internet Archive crawler gets](http://web.archive.org/web/20170425060918/https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) when encountering CA.gov's un-robust Javascript:
+
+![image archive-example.png](archive-example.png)
+
+
+So this step requires visiting the CA.gov page using Chrome, normally, to get a `cURL` command that can be used to save the raw, rendered HTML.
+
 
 1. Visit the page using Chrome and have the **Network Panel** activated
-2. Copy the request for the `autonomousveh_ol316` page using the **Copy as cURL** feature, which should result in a shell command that looks something like this:
+2. Copy the request for the `autonomousveh_ol316` page using the **Copy as cURL** feature:
+  
+   ![image copy-as-curl.png](copy-as-curl.png)
+
+3. This should result in a shell command that looks something like this:
 
     ```sh
     curl 'https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316' \
@@ -38,23 +53,47 @@ So here's a manual workaround:
       -H 'Cache-Control: no-cache' \
       -H 'Cookie: pieceofshitcookie' -H 'Connection: keep-alive' --compressed
     ```
-3. Curl that thing into a file named `original-index.html`
-4. Make a directory called `pdfs`
-4. Use a grep-like  (I prefer `ack`) to extract the URLs from this `original-index.html` page:
+4. Paste that `curl` into your Terminal and save the results as a file named [`original-index.html`](original-index.html)
+
+
+### Extracting the PDFs
+
+[original-index.html](original-index.html) contains the HTML as found on the real live site, which means that the URLs for the PDFs are relative and in this kind of format:
+
+```html
+<p dir="ltr">
+  <a href="/portal/wcm/connect/7775ab52-ff6a-4473-8300-e3d589cd6448/GMCruise_052517.pdf?MOD=AJPERES" >
+    GM Cruise May 25, 2017
+  </a>
+</p>
+```
+
+So we need to extract those relative URLs, translate them to absolute URLs, and download them to our computer. This can be done with a combination of regexes and a Bash `while` loop, with `curl`:
+
+
+1. Make a directory called `pdfs`, e.g. `$ mkdir pdfs`
+2. Use a grep-like program to match and extract the URLs from the `[original-index.html](original-index.html)` file. I like using [ack](https://beyondgrep.com/) because it not only provides PCRE-flavor regexes, but the use of capture groups to format output just as we need it (you could consider it a lazy person's `awk`):
 
     ```sh
-    $ ack 'href="(.+?pdf.+?)"' --output '$1' original-index.html
+    ack 'href="(.+?\.pdf)' original-index.html \
+      --output '$1'
     ```
 
     Example output:
 
     ```
-    /portal/wcm/connect/4fdef05c-ae0e-43c3-ac53-c96427ef40bd/GM+Cruise_052517_2.pdf?MOD=AJPERES
-    /portal/wcm/connect/7775ab52-ff6a-4473-8300-e3d589cd6448/GMCruise_052517.pdf?MOD=AJPERES
-    /portal/wcm/connect/40372935-f84b-402a-bd29-fd38924eccae/Google_041917.pdf?MOD=AJPERES
+      /portal/wcm/connect/4fdef05c-ae0e-43c3-ac53-c96427ef40bd/GM+Cruise_052517_2.pdf
+      /portal/wcm/connect/7775ab52-ff6a-4473-8300-e3d589cd6448/GMCruise_052517.pdf
+      /portal/wcm/connect/40372935-f84b-402a-bd29-fd38924eccae/Google_041917.pdf
+      /portal/wcm/connect/9ff287ca-2562-48f2-999d-be18e1714eba/Google_032617.pdf
+      /portal/wcm/connect/c7b00b79-1bc3-46d5-bd96-606342046aa8/GMCruise_032317.pdf
+      /portal/wcm/connect/562b91e1-e05f-4ba3-8d62-6794d0f6509e/GMCruise_032217.pdf
+      /portal/wcm/connect/a549dbc4-a164-4813-bc72-3164261fc89a/GMCruise_021617.pdf
+      /portal/wcm/connect/3d358211-3f0c-430e-b8db-b13392239e1e/Google_121116.pdf
+      /portal/wcm/connect/4a39c1b9-ca1f-4184-8b78-96d6baf98628/Google_102616.pdf
     ```
 
-5. Feed that `ack` command into `curl` via a loop; note that the `MOD=AJPERES` has to be included in the GET request, as long as a nominal user agent (`'Mozilla' seems to work fine`)
+3. Feed that `ack` command into `curl` via a loop; note that the `MOD=AJPERES` has to be included in the GET request, as well as a nominal user agent (`'Mozilla'` seems to work fine):
 
 
     ```sh
@@ -77,8 +116,13 @@ Will be saved as:
     /pdfs/Google_110215.pdf
 
 
+### Creating `index.html` with relative links
 
-Then use `sed` to create a `index.html` that's basically the same as `original-index.html`, except with the PDF URLs changed from their original values to the local ones, e.g. `/pdfs/whataver.pdf`
+Now the [pdfs/](pdfs/) directory contains all of the PDFs in one place, locally, for easy browsing. This next step is optional; it simply creates a version of [original-index.html](original-index.html) in which the PDF links have been translated to point to `/pdfs` instead of `https://www.dmv.ca.gov/portal/wcm/connect/`.
+
+The result is [index.html](index.html), which can be visited as hosted on Github Pages at:
+
+https://wgetsnaps.github.io/ca-dmv-autonomous-vehicle-accidents/
 
 
 
@@ -91,10 +135,5 @@ $ sed  -e 's/?MOD=AJPERES//' \
 ```
 
 
-You can visit the hacky, but *live* mirror here:
-
-https://wgetsnaps.github.io/ca-dmv-autonomous-vehicle-accidents/
-
-Or look at the raw [index.html](index.html) code.
 
 
