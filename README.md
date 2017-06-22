@@ -6,11 +6,9 @@
 
 
 Mirror page (sans proper CSS/JS references that `wget` would have fetched):
-
 https://wgetsnaps.github.io/ca-dmv-autonomous-vehicle-accidents/
 
-Original page:
-
+Original page on dmv.ca.gov:
 https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316
 
 Or, if you'd rather see the PDFs as a file listing:
