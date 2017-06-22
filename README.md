@@ -51,7 +51,7 @@ http://web.archive.org/web/20161022094922/https://www.google.com/selfdrivingcar/
 So here's a manual workaround using `curl`, `sed`, `ack`, and a simple Bash loop. And Google Chrome's dev tools. 
 
 
-### Saving a proper copy of the HTML
+### Manually downloading and saving a copy of the dmv.ca.gov webpage
 
 
 The CA DMV page is mostly a bunch of links to PDFS (which you can view in the [pdfs/](pdfs/) directory on this repo):
@@ -63,9 +63,11 @@ However, visiting the [CA DMV's Autonomous Reports accidents page](https://www.d
 
 ![image archive-example.png](readme_images/archive-example.png)
 
-The dmv.ca.gov's Javascript, as far as I can tell, is used to set a cookie -- and check for headers, such as a `User-Agent` that is *not* `wget` -- that is validated server-side. Currently, `wget` doesn't execute Javascript, so that makes it fairly impossible to use `wget` alone to capture the dmv.ca.gov page.
+As far as I can tell, the dmv.ca.gov uses Javascript to set a cookie -- which is validated server-side -- and check for headers, or at least a `User-Agent` that is *not* `wget`. Because  `wget` doesn't execute Javascript, it's impossible to mirror the dmv.ca.gov page with `wget` alone, i.e. without the [help of a headless browser such as PhantomJS](http://stefaanlippens.net/spider-javascript-manipulated-html-with-phantomjs/).
 
-So we require a *manual* step: visiting the CA.gov page using the Chrome web browser to get a `cURL` command that can be used to save the raw, rendered HTML.
+Since this dmv.ca.gov page doesn't have a ton of content, we compromise by replacing the `wget` command with one *manual* step, followed by a series of scriptable, individual calls to good ol' [curl](https://curl.haxx.se/) and other fun *nix tools.
+
+By "manual" step, I mean something that has to be done via point-and-click -- visiting the dmv.ca.gov URL the everyday way, i.e. with a web browser, which allows us, via Chrome's dev tools, to get a command that we can copy-paste into the command-line to download a properly rendered version of the webpage. 
 
 
 1. Visit the page using Chrome and have the **Network Panel** activated
@@ -91,6 +93,7 @@ So we require a *manual* step: visiting the CA.gov page using the Chrome web bro
       -H 'Cookie: pieceofshitcookie' -H 'Connection: keep-alive' --compressed \
       -o original-index.html
     ```
+
 
 
 ### Extracting the PDFs
