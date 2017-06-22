@@ -5,13 +5,17 @@
 ### or, "*How to curl when wget gets blocked by JavaScript*"
 
 
-Mirror page:
+Mirror page (sans proper CSS/JS references that `wget` would have fetched):
 
 https://wgetsnaps.github.io/ca-dmv-autonomous-vehicle-accidents/
 
 Original page:
 
 https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316
+
+
+![image sample-site-screenshot.png](readme_images/sample-site-screenshot.png)
+
 
 
 This page is where California's DMV posts accident reports involving autonomous vehicles, such as the ones operated by Google/Waymo. While [Google *used* to disclose these incidents voluntarily on its own site](http://2016.padjo.org/assignments/google-car-crash-reports/), the official forms/reports are published on dmv.ca.gov. 
