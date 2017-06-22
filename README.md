@@ -14,7 +14,10 @@ Original page:
 https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316
 
 
-This page is where California's DMV posts accident reports involving autonomous vehicles, such as the ones operated by Google/Waymo. These reports used to be self-published, but now we have to go to dmv.ca.gov to find them. As [Business Insider reports](http://www.businessinsider.com/waymo-ends-publishing-self-driving-car-accident-reports-website-2017-1):
+This page is where California's DMV posts accident reports involving autonomous vehicles, such as the ones operated by Google/Waymo. While [Google *used* to disclose these incidents voluntarily on its own site](http://2016.padjo.org/assignments/google-car-crash-reports/), the official forms/reports are published on dmv.ca.gov. 
+
+
+As [Business Insider reports](http://www.businessinsider.com/waymo-ends-publishing-self-driving-car-accident-reports-website-2017-1):
 
 > [Google/Waymo] removed the page of monthly reports detailing traffic collisions and other accidents on public roads that involve its self-driving vehicles. And Waymo will no longer publish the accident reports on its website, Business Insider has learned. 
 
@@ -24,6 +27,9 @@ This page is where California's DMV posts accident reports involving autonomous 
 > ...Jessica Gonzalez, a spokesperson for the California DMV, told Business Insider that Waymo is not required to publish the monthly public reports. But the company is required to report any accident involving a Waymo self-driving vehicle to the DMV. Those accidents are published on the California DMV's website. 
 
 
+FWIW, you can find a snapshot of what [https://www.google.com/selfdrivingcar/reports/](https://www.google.com/selfdrivingcar/reports/) looked like, as well as Google's version of the accident reports (still in PDF) on the Internet Archive:
+
+http://web.archive.org/web/20161022094922/https://www.google.com/selfdrivingcar/reports/
 
 
 
@@ -155,6 +161,111 @@ Short explanation of this `sed` command: it runs 3 substitution expressions:
 1. Remove all instances of `?MOD=AJPERES`
 2. Replace the `/portal/wcm/connect/...` paths with `./pdfs/`
 3. Neuter the `<base>` tag which caused the browser to prepend the original `dmv.ca.gov` domain to relative URLs.
+
+
+
+### Archiving Google's monthly accident reports
+
+tl;dr: Using `curl`, `ack`, and `xargs` to do a quickie archive of Google's self-published reports and saving them to [google-pdfs/](google-pdfs/) 
+
+*note: This really should be its own [wgetsnaps](https://github.com/wgetsnaps) repo, but whatever.*
+
+As mentioned in the intro, Google used to publish their own monthly compilations of the accident reports. This was in addition to what they submitted to California's DMV, but these reports were more reader-friendly and contained more information about the program overall, while omitting some of the official report data (such as timestamp of accident).
+
+Google's landing page for these reports *was*:
+
+https://www.google.com/selfdrivingcar/reports/
+
+However, as Business Insider reported, the landing page was changed to a redirect to Waymo [in January 2017](http://web.archive.org/web/20170225184124/https://www.google.com/selfdrivingcar/reports/).
+
+The most recent snapshot of Google's reports page, pre-Waymo-redirect, is from The Internet Archive on October 22, 2016:
+
+http://web.archive.org/web/20161022094922/https://www.google.com/selfdrivingcar/reports/
+
+The snapshot links to the Google PDFs, but the Archive may not have actually saved a copy of those PDFs, because their URLS do a redirect, e.g. 
+
+From: 
+
+https://www.google.com/selfdrivingcar/files/reports/report-0916.pdf
+
+To:
+
+https://static.googleusercontent.com/media/www.google.com/en//selfdrivingcar/files/reports/report-0916.pdf
+
+At some point, this Google static file server might be taken down, so let's archive the reports using the URLs as found on the Archive snapshot and using `curl` to follow the redirects:
+
+
+```sh
+$ mkdir -p google-pdfs && cd google-pdfs
+$ curl \
+    http://web.archive.org/web/20161022094922/https://www.google.com/selfdrivingcar/reports/ \
+  | ack -o 'https://www.google.com/selfdrivingcar/files.+\.pdf(?=")' \
+  | xargs -n 1 curl -LO
+```
+
+Notes:
+
+- the `L` flag for `curl` is used to follow the redirect
+- `xargs -n 1` specifies that the `curl -LO` command only uses 1 argument, i.e. `curl` is run for each URL extracted via the `ack` capture.
+
+
+#### Getting the post-September-2016 reports
+
+Because the Internet Archive only managed to get a snapshot of the page in late [October 2016](http://web.archive.org/web/20161022094922/https://www.google.com/selfdrivingcar/reports/), the archive HTML doesn't contain links to the October, November, or December reports for 2016, if such reports existed.
+
+Luckily, it's pretty easy to guess Google's naming convention from the existing files:
+
+`.../selfdrivingcar/files/reports/report-0916.pdf`
+
+i.e., the October and November 2016 reports are likely, and respectively, at:
+
+https://static.googleusercontent.com/media/www.google.com/en//selfdrivingcar/files/reports/report-1016.pdf
+
+https://static.googleusercontent.com/media/www.google.com/en//selfdrivingcar/files/reports/report-1116.pdf
+
+(If Google published a December 2016 or annual 2016 report, it doesn't exist at the expected URLs.)
+
+
+One more `curl`, using its [nifty URL globbing feature](https://ec.haxx.se/cmdline-globbing.html):
+
+```sh
+# assuming we're still in google-pdfs/
+$ curl -LO \
+  https://static.googleusercontent.com/media\
+/www.google.com/en//selfdrivingcar/files/reports\
+/report-[10-11]16.pdf
+```
+
+
+
+The results are saved in this repo in the [google-pdfs/](google-pdfs/) subdirectory.
+
+Compare Google's self-published August 2016 report versus the 2 accident reports it submitted to the CA DMV:
+
+- Google's self-published report for August 2016: [google-pdfs/report-0816.pdf](google-pdfs/report-0816.pdf)
+- Google's reports as submitted to the DMV:
+  - [pdfs/Google_080816.pdf](pdfs/Google_080816.pdf)
+  - [pdfs/Google_081616.pdf](pdfs/Google_081616.pdf)
+
+
+Here's a screenshot of the August 8, 2016 accident as described in Google's [self-published monthly report](google-pdfs/report-0816.pdf):
+
+![image google-2016-08-report-screenshot.png](google-2016-08-report-screenshot.png)
+
+Here's screenshot sof [the August 8, 2016 report](pdfs/Google_080816.pdf), as sent to the DMV:
+
+![image google-2016-08-08-dmv-report-01-screenshot.jpg](google-2016-08-08-dmv-report-01-screenshot.jpg)
+
+![image google-2016-08-08-dmv-report-02-screenshot.jpg](google-2016-08-08-dmv-report-02-screenshot.jpg)
+
+
+## Conclusion
+
+Government websites should use Javascript *sparingly*. There's no reason why a page that simply lists links to static content (PDFs) needs to be completely dependent on Javascript (and incredibly brittle Javascript at that) to render public information.
+
+Otherwise, feel free to use these reports for your research. I use them as an [exercise on the process -- and its complications and nuances -- of turning event info into structured data](http://2016.padjo.org/assignments/google-car-crash-reports/). 
+
+
 
 
 
