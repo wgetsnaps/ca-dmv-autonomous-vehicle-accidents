@@ -149,6 +149,14 @@ $ sed  -e 's/?MOD=AJPERES//' \
        original-index.html > index.html
 ```
 
+Short explanation of this `sed` command: it runs 3 substitution expressions:
+
+1. Remove all instances of `?MOD=AJPERES`
+2. Replace the `/portal/wcm/connect/...` paths with `./pdfs/`
+3. Neuter the `<base>` tag which caused the browser to prepend the original `dma.ca.gov` domain to relative URLs.
+
+
+
 
 
 
