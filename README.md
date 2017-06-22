@@ -129,7 +129,7 @@ https://www.dmv.ca.gov/portal/wcm/connect/a35d0b74-02dc-4725-9a5f-cc4ac71e421b/G
 
 Will be saved as:
 
-    /pdfs/Google_110215.pdf
+[/pdfs/Google_110215.pdf](pdfs/Google_110215.pdf)
 
 
 ### Creating `index.html` with relative links
