@@ -45,15 +45,15 @@ http://web.archive.org/web/20161022094922/https://www.google.com/selfdrivingcar/
 
 ## Web-scraping the semi-automatic way
 
-**tl;dr**: California's DMV page is a **hot shit mess** that can't be used with a client that lacks Javascript, i.e. `wget` So I've written a workaround that has one point-and-click step, and then a bunch of fancy `bash`-ing with regexes to at least mirror the content of the page (i.e. the PDF reports)
+**tl;dr**: California's DMV page is a **hot shit mess** that can't be used with a client that lacks Javascript, i.e. `wget` So I've written a workaround that has one point-and-click step, and then a bunch of fancy `bash`-ing with regexes to at least mirror the content of the page (i.e. the PDF reports).
 
-So the rest of this guide describes an alternative approach that combined a manual workaround -- via Google Chrome's dev tools -- combined with `curl`, `sed`, `ack`, and other Bash tools. 
+Normally, we could rely on services such as the Internet Archive to preserve this kind of important public information. But the dmv.ca.gov appears to be so brittle that even the otherwise-robust [Internet Archive crawler](http://web.archive.org/web/20170425060918/https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) can't render it.
 
-What's the point of this pain? From a journalistic standpoint, the dmv.ca.gov appears to be so brittle that even the otherwise-robust [Internet Archive crawler](http://web.archive.org/web/20170425060918/https://www.dmv.ca.gov/portal/dmv/detail/vr/autonomous/autonomousveh_ol316) can't render it. If we just wanted to copy the PDFs, perhaps a browser plugin like [DownloadThemAll](http://www.downthemall.net/) would work. But the purpose of the [wgetsnaps](https://github.com/wgetsnaps) project is to provide an automatable workflow so that a site or webpage can be archived *consistently*, without depending on series of plugins and pointing-and-clicking that can easily get fumbled, nevermind it being tedious physical labor. 
+Since there are relatively few reports, what's the point of trying to programmatically archive the dmv.ca.gov site when we can just manually download the reports with a web browser, or perhaps with a browser plugin such as [DownloadThemAll](http://www.downthemall.net/)? Besides the geeky challenge, the overall purpose of the [wgetsnaps](https://github.com/wgetsnaps) project is to demonstrate how to write, and benefit from automatable workflows. So that a site or webpage can be archived *consistently*, without depending on a myriad of plugins and the tedious physical labor of pointing-and-clicking, all prone to frustrating and unreproducible bugs. 
 
-While the archiving of this particular dmv.ca.gov page can't be completely automated (without much more programming work), this guide is meant to show how such a task can be *mostly* automated.
+While the archiving of this particular dmv.ca.gov page can't be *completely* automated -- at least without much more sophisticated programming and tools -- this guide is meant to show how such a task can be *mostly* automated.
 
-So read on if you care about the technical/scripting details of how to sloppily archive a government website that uses brittle Javascript.
+So read on if you care about the technical details of how to sloppily archive a government website that uses brittle Javascript.
 
 
 ### Manually downloading and saving a copy of the dmv.ca.gov webpage
